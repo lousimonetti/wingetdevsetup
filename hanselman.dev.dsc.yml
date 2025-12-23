@@ -298,22 +298,29 @@ properties:
         allowPrerelease: true
       settings:
         GetScript: |
-          $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
-          @{ Result = Test-Path $profilePath }
+          $pwsh7ProfilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+          @{ Result = Test-Path $pwsh7ProfilePath }
         TestScript: |
           return $false
         SetScript: |
           try {
-            # Create PowerShell profile directory if it doesn't exist
-            $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
-            $profileDir = Split-Path $profilePath -Parent
-            if (!(Test-Path $profileDir)) {
-                New-Item -Path $profileDir -ItemType Directory -Force | Out-Null
-            }
-            
-            # Download profile from repo
             $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
-            Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $profilePath
+            
+            # Setup PowerShell 7 profile
+            $pwsh7ProfilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+            $pwsh7ProfileDir = Split-Path $pwsh7ProfilePath -Parent
+            if (!(Test-Path $pwsh7ProfileDir)) {
+                New-Item -Path $pwsh7ProfileDir -ItemType Directory -Force | Out-Null
+            }
+            Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $pwsh7ProfilePath
+            
+            # Setup Windows PowerShell 5.1 profile too
+            $winPSProfilePath = "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
+            $winPSProfileDir = Split-Path $winPSProfilePath -Parent
+            if (!(Test-Path $winPSProfileDir)) {
+                New-Item -Path $winPSProfileDir -ItemType Directory -Force | Out-Null
+            }
+            Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $winPSProfilePath
             
             # Download Oh My Posh theme
             $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
