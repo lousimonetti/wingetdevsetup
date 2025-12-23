@@ -326,8 +326,15 @@ properties:
             # Use PowerShell 7 to install modules in its module path
             $pwsh7Path = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
             if (Test-Path $pwsh7Path) {
-              & $pwsh7Path -NoProfile -Command "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser -SkipPublisherCheck"
-              & $pwsh7Path -NoProfile -Command "Install-Module -Name z -Force -Scope CurrentUser -SkipPublisherCheck -AllowClobber"
+              Write-Host "Installing PowerShell modules for profile..."
+              & $pwsh7Path -NoProfile -Command @"
+                Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+                Install-Module -Name Terminal-Icons -Force -Scope CurrentUser -Repository PSGallery
+                Install-Module -Name z -Force -Scope CurrentUser -Repository PSGallery -AllowClobber
+                Write-Output 'Modules installed successfully'
+"@
+            } else {
+              Write-Warning "PowerShell 7 not found at $pwsh7Path - skipping module installation"
             }
             
             # Download Oh My Posh theme
