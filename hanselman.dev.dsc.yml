@@ -110,12 +110,15 @@ properties:
         allowPrerelease: true
       settings:
         GetScript: |
-          @{ Result = (nvm list) -match 'lts' }
+          @{ Result = Test-Path "$env:ProgramFiles\nodejs" }
         TestScript: |
           return $false
         SetScript: |
-          nvm install lts
-          nvm use lts
+          # Refresh PATH to pick up NVM
+          $env:NVM_HOME = "$env:APPDATA\nvm"
+          $env:PATH = "$env:NVM_HOME;$env:PATH"
+          & "$env:NVM_HOME\nvm.exe" install lts
+          & "$env:NVM_HOME\nvm.exe" use lts
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: python
