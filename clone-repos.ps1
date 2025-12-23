@@ -12,6 +12,14 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Authenticated to GitHub. Cloning repos to $repoRoot..." -ForegroundColor Green
 
+# Fetch Nightscout URL from private gist and set as user env var
+Write-Host "Setting up Nightscout URL..." -ForegroundColor Cyan
+$nightscoutUrl = gh gist view 985fa5febe6dbf7f2df70d6582d734d9 --raw
+if ($nightscoutUrl) {
+    [Environment]::SetEnvironmentVariable("OSTENSIBLY_NIGHTSCOUT_URL", $nightscoutUrl.Trim(), "User")
+    Write-Host "Nightscout URL configured." -ForegroundColor Green
+}
+
 # List of repos to clone (add your repos here)
 $repos = @(
     "shanselman/azurefridayaggregator"
