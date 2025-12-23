@@ -348,15 +348,15 @@ properties:
             if (Test-Path $pwsh7Path) {
               Write-Host "Installing PowerShell modules for profile..."
               # Create a temp script to run in PowerShell 7
-              $scriptContent = @'
-Import-Module PowerShellGet -Force -ErrorAction Stop
-Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Install-Module -Name Terminal-Icons -Force -Scope CurrentUser
-Install-Module -Name z -Force -Scope CurrentUser -AllowClobber
-Write-Output "Modules installed successfully"
-'@
+              $scriptLines = @(
+                "Import-Module PowerShellGet -Force -ErrorAction Stop",
+                "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted",
+                "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser",
+                "Install-Module -Name z -Force -Scope CurrentUser -AllowClobber",
+                "Write-Output 'Modules installed successfully'"
+              )
               $tempScript = "$env:TEMP\install-ps-modules.ps1"
-              $scriptContent | Out-File -FilePath $tempScript -Encoding UTF8 -Force
+              $scriptLines -join "`n" | Out-File -FilePath $tempScript -Encoding UTF8 -Force
               & $pwsh7Path -NoProfile -ExecutionPolicy Bypass -File $tempScript
               Remove-Item $tempScript -Force -ErrorAction SilentlyContinue
             } else {
