@@ -257,6 +257,15 @@ properties:
         id: Voidstar.FilePilot
         source: winget
 
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: gsudo
+      directives:
+        description: Install gsudo
+        allowPrerelease: true
+      settings:
+        id: gerardog.gsudo
+        source: winget
+
 # PowerShell Profile and Oh My Posh setup
     - resource: PSDscResources/Script
       id: SetupPowerShellProfile
