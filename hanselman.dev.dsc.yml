@@ -109,7 +109,7 @@ properties:
         description: Install .NET SDK 10
         allowPrerelease: true
       settings:
-        id: Microsoft.DotNet.SDK
+        id: Microsoft.DotNet.SDK.10
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
