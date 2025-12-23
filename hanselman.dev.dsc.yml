@@ -327,11 +327,14 @@ properties:
             $pwsh7Path = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
             if (Test-Path $pwsh7Path) {
               Write-Host "Installing PowerShell modules for profile..."
-              # First install PowerShellGet if needed, then install the modules
-              & $pwsh7Path -NoProfile -Command "if (-not (Get-Module -ListAvailable -Name PowerShellGet)) { Install-Module -Name PowerShellGet -Force -Scope CurrentUser -AllowClobber }"
-              & $pwsh7Path -NoProfile -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue"
-              & $pwsh7Path -NoProfile -Command "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser -ErrorAction Stop"
-              & $pwsh7Path -NoProfile -Command "Install-Module -Name z -Force -Scope CurrentUser -AllowClobber -ErrorAction Stop"
+              # Import PowerShellGet explicitly and install modules
+              & $pwsh7Path -NoProfile -Command {
+                Import-Module PowerShellGet -Force -ErrorAction Stop
+                Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+                Install-Module -Name Terminal-Icons -Force -Scope CurrentUser
+                Install-Module -Name z -Force -Scope CurrentUser -AllowClobber
+                Write-Output "Modules installed successfully"
+              }
             } else {
               Write-Warning "PowerShell 7 not found at $pwsh7Path - skipping module installation"
             }
