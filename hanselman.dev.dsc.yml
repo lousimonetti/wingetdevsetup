@@ -262,6 +262,7 @@ properties:
       dependsOn:
         - powershell
         - ohmyposh
+        - windowsterminal
       directives:
         description: Setup PowerShell profile and Oh My Posh theme
         allowPrerelease: true
@@ -284,3 +285,17 @@ properties:
           # Download Oh My Posh theme
           $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
           Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -OutFile $ompThemePath
+          
+          # Install CascadiaCode Nerd Font
+          oh-my-posh font install CascadiaCode
+          
+          # Configure Windows Terminal to use the font
+          $wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+          if (Test-Path $wtSettingsPath) {
+              $settings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
+              if (-not $settings.profiles.defaults) {
+                  $settings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
+              }
+              $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove Nerd Font" } -Force
+              $settings | ConvertTo-Json -Depth 10 | Set-Content $wtSettingsPath
+          }
