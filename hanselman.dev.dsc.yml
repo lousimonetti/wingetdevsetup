@@ -303,31 +303,36 @@ properties:
         TestScript: |
           return $false
         SetScript: |
-          # Create PowerShell profile directory if it doesn't exist
-          $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
-          $profileDir = Split-Path $profilePath -Parent
-          if (!(Test-Path $profileDir)) {
-              New-Item -Path $profileDir -ItemType Directory -Force
-          }
-          
-          # Download profile from repo
-          $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
-          Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $profilePath
-          
-          # Download Oh My Posh theme
-          $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
-          Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -OutFile $ompThemePath
-          
-          # Install CascadiaCode Nerd Font
-          oh-my-posh font install CascadiaCode
-          
-          # Configure Windows Terminal to use the font
-          $wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-          if (Test-Path $wtSettingsPath) {
-              $settings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
-              if (-not $settings.profiles.defaults) {
-                  $settings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
-              }
-              $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove NF" } -Force
-              $settings | ConvertTo-Json -Depth 10 | Set-Content $wtSettingsPath
+          try {
+            # Create PowerShell profile directory if it doesn't exist
+            $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+            $profileDir = Split-Path $profilePath -Parent
+            if (!(Test-Path $profileDir)) {
+                New-Item -Path $profileDir -ItemType Directory -Force | Out-Null
+            }
+            
+            # Download profile from repo
+            $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
+            Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $profilePath
+            
+            # Download Oh My Posh theme
+            $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
+            Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -OutFile $ompThemePath
+            
+            # Install CascadiaCode Nerd Font
+            & oh-my-posh font install CascadiaCode
+            
+            # Configure Windows Terminal to use the font
+            $wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+            if (Test-Path $wtSettingsPath) {
+                $settings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
+                if (-not $settings.profiles.defaults) {
+                    $settings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
+                }
+                $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove NF" } -Force
+                $settings | ConvertTo-Json -Depth 10 | Set-Content $wtSettingsPath
+            }
+          } catch {
+            Write-Error "Error in SetupPowerShellProfile: $_"
+            throw
           }
