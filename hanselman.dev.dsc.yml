@@ -322,6 +322,13 @@ properties:
             }
             Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $winPSProfilePath
             
+            # Install required PowerShell modules for the profile
+            # Use PowerShell 7 to install modules in its module path
+            $pwsh7Path = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
+            if (Test-Path $pwsh7Path) {
+              & $pwsh7Path -NoProfile -Command "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser -SkipPublisherCheck"
+            }
+            
             # Download Oh My Posh theme
             $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
             Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -OutFile $ompThemePath
