@@ -205,18 +205,6 @@ properties:
         SetScript: |
           New-Item -Path 'D:\github' -ItemType Directory -Force
 
-# Clone public repos
-    - resource: GitDsc/GitClone
-      id: cloneFilePilot
-      dependsOn:
-        - CreateGitHubFolder
-      directives:
-        description: Clone FilePilot repository
-        allowPrerelease: true
-      settings:
-        HttpsUrl: https://github.com/Voidstar-AI/FilePilot.git
-        RootDirectory: 'D:\github\'
-
 # Windows Settings
     - resource: Microsoft.Windows.Developer/WindowsExplorer
       directives:
@@ -259,6 +247,15 @@ properties:
       settings:
         id: 9N1F85V9T8BN
         source: msstore
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: filepilot
+      directives:
+        description: Install FilePilot
+        allowPrerelease: true
+      settings:
+        id: Voidstar.FilePilot
+        source: winget
 
 # PowerShell Profile and Oh My Posh setup
     - resource: PSDscResources/Script
