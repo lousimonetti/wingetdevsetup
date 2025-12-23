@@ -139,6 +139,29 @@ if ($matched) {
 
 **Note:** Store match result in variable BEFORE accessing `$matches[1]` to avoid "Cannot index into a null array" error.
 
+### 8. Oh My Posh Config Environment Variables Don't Work
+**Problem:** Oh My Posh JSON config files don't expand environment variables. Using `{{ .Env.VAR }}` in the `url` property failed - template syntax only works in the `template` property, not in `properties`/`options`.
+
+**Attempts:**
+- `{{ .Env.OSTENSIBLY_NIGHTSCOUT_URL }}` - Failed, tried to use literal string as URL
+- `$env:OSTENSIBLY_NIGHTSCOUT_URL` - Failed, JSON doesn't expand PowerShell variables
+
+**Final Solution:** Dynamically generate the Oh My Posh config during DSC setup:
+1. Download template JSON from repo
+2. Fetch Nightscout URL from private gist
+3. Replace placeholder `$env:OSTENSIBLY_NIGHTSCOUT_URL` with actual URL using string replace
+4. Write the final config file with embedded URL
+
+```powershell
+$ompTemplate = Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -UseBasicParsing | Select-Object -ExpandProperty Content
+$gistContent = (Invoke-WebRequest -Uri "https://gist.../raw" -UseBasicParsing).Content
+if ($gistContent -match '(https://[^\s]+)') {
+    $nightscoutUrl = $matches[1]
+    $ompTemplate = $ompTemplate -replace '\$env:OSTENSIBLY_NIGHTSCOUT_URL', $nightscoutUrl
+}
+$ompTemplate | Out-File -FilePath $ompThemePath -Encoding UTF8
+```
+
 ### 8. .NET SDK Package ID
 **Problem:** Used `Microsoft.DotNet.SDK.Preview` but correct ID is `Microsoft.DotNet.SDK.10`.
 
@@ -166,7 +189,9 @@ if ($matched) {
 - Safe to run multiple times
 
 ## Oh My Posh Environment Variable
-The theme uses `{{ .Env.OSTENSIBLY_NIGHTSCOUT_URL }}` which is **correct syntax** for Oh My Posh Go templating.
+The theme template uses `$env:OSTENSIBLY_NIGHTSCOUT_URL` as a **placeholder** that gets replaced during DSC setup with the actual URL from the private gist. JSON files don't support environment variable expansion, so we dynamically generate the final config file.
+
+**Important:** Go template syntax like `{{ .Env.VAR }}` only works in the `template` property, NOT in `properties`/`options` fields like `url`.
 
 ## Private Gist
 - ID: `985fa5febe6dbf7f2df70d6582d734d9`
