@@ -8,7 +8,8 @@ $mainFunction = {
 
     $dscUri = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/"
     $dscDev = "hanselman.dev.dsc.yml"
-    $dscDevUri = $dscUri + $dscDev
+    $cacheBust = "?v=$(Get-Date -Format 'yyyyMMddHHmmss')"
+    $dscDevUri = $dscUri + $dscDev + $cacheBust
 
     if (!$isAdmin) {
         # Shoulder tap terminal so it gets registered moving forward
