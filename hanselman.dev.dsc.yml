@@ -298,19 +298,21 @@ properties:
         allowPrerelease: true
       settings:
         GetScript: |
-          @{ Result = Test-Path $PROFILE }
+          $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+          @{ Result = Test-Path $profilePath }
         TestScript: |
           return $false
         SetScript: |
           # Create PowerShell profile directory if it doesn't exist
-          $profileDir = Split-Path $PROFILE -Parent
+          $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+          $profileDir = Split-Path $profilePath -Parent
           if (!(Test-Path $profileDir)) {
               New-Item -Path $profileDir -ItemType Directory -Force
           }
           
           # Download profile from repo
           $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
-          Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $PROFILE
+          Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $profilePath
           
           # Download Oh My Posh theme
           $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
