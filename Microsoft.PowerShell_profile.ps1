@@ -13,6 +13,16 @@ set-alias desktop "Desktop.ps1"
 #Set-Theme ParadoxGlucose
 #Set-PoshPrompt -theme "D:\Dropbox\poshv3.json"
 
+# Load Nightscout URL from private gist (extract URL only)
+try {
+    $gistContent = (Invoke-WebRequest -Uri "https://gist.githubusercontent.com/shanselman/985fa5febe6dbf7f2df70d6582d734d9/raw" -UseBasicParsing).Content
+    if ($gistContent -match '(https://[^\s]+)') {
+        $env:OSTENSIBLY_NIGHTSCOUT_URL = $matches[1]
+    }
+} catch {
+    # Silently fail if gist is unavailable
+}
+
 #oh-my-posh --init --shell pwsh --config "C:\Users\scottha\OneDrive - Microsoft\poshv5.json" | Invoke-Expression
 oh-my-posh init pwsh --config "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json" | Invoke-Expression
 

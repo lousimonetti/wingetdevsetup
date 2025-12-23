@@ -14,10 +14,14 @@ Write-Host "Authenticated to GitHub. Cloning repos to $repoRoot..." -ForegroundC
 
 # Fetch Nightscout URL from private gist and set as user env var
 Write-Host "Setting up Nightscout URL..." -ForegroundColor Cyan
-$nightscoutUrl = gh gist view 985fa5febe6dbf7f2df70d6582d734d9 --raw
-if ($nightscoutUrl) {
-    [Environment]::SetEnvironmentVariable("OSTENSIBLY_NIGHTSCOUT_URL", $nightscoutUrl.Trim(), "User")
-    Write-Host "Nightscout URL configured." -ForegroundColor Green
+$nightscoutRaw = gh gist view 985fa5febe6dbf7f2df70d6582d734d9 --raw
+if ($nightscoutRaw -match '(https://[^\s]+)') {
+    $nightscoutUrl = $matches[1]
+    [Environment]::SetEnvironmentVariable("OSTENSIBLY_NIGHTSCOUT_URL", $nightscoutUrl, "User")
+    $env:OSTENSIBLY_NIGHTSCOUT_URL = $nightscoutUrl
+    Write-Host "Nightscout URL configured: $nightscoutUrl" -ForegroundColor Green
+} else {
+    Write-Host "WARNING: Could not parse Nightscout URL from gist" -ForegroundColor Yellow
 }
 
 # List of repos to clone (add your repos here)
