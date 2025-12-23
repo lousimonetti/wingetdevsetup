@@ -306,6 +306,81 @@ properties:
             Remove-Item $installerPath -Force
           }
 
+# AI and Dev Tools
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: foundrylocal
+      directives:
+        description: Install Foundry Local
+        allowPrerelease: true
+      settings:
+        id: Microsoft.FoundryLocal
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: lmstudio
+      directives:
+        description: Install LM Studio
+        allowPrerelease: true
+      settings:
+        id: ElementLabs.LMStudio
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: ollama
+      directives:
+        description: Install Ollama
+        allowPrerelease: true
+      settings:
+        id: Ollama.Ollama
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: claudecode
+      directives:
+        description: Install Claude Code
+        allowPrerelease: true
+      settings:
+        id: Anthropic.ClaudeCode
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: goose
+      directives:
+        description: Install Goose
+        allowPrerelease: true
+      settings:
+        id: Pressly.Goose
+        source: winget
+
+# Media and Entertainment
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: vlc
+      directives:
+        description: Install VLC media player
+        allowPrerelease: true
+      settings:
+        id: VideoLAN.VLC
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: netflix
+      directives:
+        description: Install Netflix
+        allowPrerelease: true
+      settings:
+        id: 9WZDNCRFJ3TJ
+        source: msstore
+
+# Utilities
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: midnightcommander
+      directives:
+        description: Install GNU Midnight Commander
+        allowPrerelease: true
+      settings:
+        id: GNU.MidnightCommander
+        source: winget
+
 # PowerShell Profile and Oh My Posh setup
     - resource: PSDscResources/Script
       id: SetupPowerShellProfile
