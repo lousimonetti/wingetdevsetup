@@ -479,9 +479,23 @@ properties:
               Write-Warning "PowerShell 7 not found at $pwsh7Path - skipping module installation"
             }
             
-            # Download Oh My Posh theme
+            # Download Oh My Posh theme and inject Nightscout URL
             $ompThemePath = "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json"
-            Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -OutFile $ompThemePath
+            $ompTemplate = Invoke-WebRequest -Uri "$repoBase/hanselman.omp.json" -UseBasicParsing | Select-Object -ExpandProperty Content
+            
+            # Get Nightscout URL from private gist
+            try {
+              $gistContent = (Invoke-WebRequest -Uri "https://gist.githubusercontent.com/shanselman/985fa5febe6dbf7f2df70d6582d734d9/raw" -UseBasicParsing).Content
+              if ($gistContent -match '(https://[^\s]+)') {
+                $nightscoutUrl = $matches[1]
+                # Replace placeholder with actual URL
+                $ompTemplate = $ompTemplate -replace '\$env:OSTENSIBLY_NIGHTSCOUT_URL', $nightscoutUrl
+              }
+            } catch {
+              Write-Warning "Could not fetch Nightscout URL from gist"
+            }
+            
+            $ompTemplate | Out-File -FilePath $ompThemePath -Encoding UTF8
             
             # Install CascadiaCode Nerd Font
             & oh-my-posh font install CascadiaCode
