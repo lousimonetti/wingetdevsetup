@@ -75,12 +75,32 @@ properties:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: visualstudio
       directives:
-        description: Install Visual Studio 2026 Community with workloads
+        description: Install Visual Studio 2026 Community
         allowPrerelease: true
       settings:
         id: Microsoft.VisualStudio.Community
         source: winget
-        override: "--config https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/.vsconfig"
+
+    - resource: PSDscResources/Script
+      id: visualstudioworkloads
+      dependsOn:
+        - visualstudio
+      directives:
+        description: Configure Visual Studio workloads from .vsconfig
+        allowPrerelease: true
+      settings:
+        GetScript: |
+          @{ Result = $true }
+        TestScript: |
+          return $false
+        SetScript: |
+          $vsConfigUrl = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/.vsconfig"
+          $vsConfigPath = "$env:TEMP\.vsconfig"
+          Invoke-WebRequest -Uri $vsConfigUrl -OutFile $vsConfigPath
+          $vsInstallerPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+          if (Test-Path $vsInstallerPath) {
+            & $vsInstallerPath modify --installPath "${env:ProgramFiles}\Microsoft Visual Studio\2026\Community" --config $vsConfigPath --quiet
+          }
 
 # Runtimes and SDKs
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -115,7 +135,7 @@ properties:
           return $false
         SetScript: |
           # Refresh PATH to pick up NVM
-          $env:NVM_HOME = "$env:APPDATA\nvm"
+          $env:NVM_HOME = "$env:LOCALAPPDATA\nvm"
           $env:PATH = "$env:NVM_HOME;$env:PATH"
           & "$env:NVM_HOME\nvm.exe" install lts
           & "$env:NVM_HOME\nvm.exe" use lts
