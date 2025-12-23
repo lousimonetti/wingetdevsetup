@@ -296,6 +296,6 @@ properties:
               if (-not $settings.profiles.defaults) {
                   $settings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
               }
-              $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove Nerd Font" } -Force
+              $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove NF" } -Force
               $settings | ConvertTo-Json -Depth 10 | Set-Content $wtSettingsPath
           }
