@@ -353,26 +353,6 @@ properties:
         source: winget
 
     - resource: PSDscResources/Script
-      id: toad
-      directives:
-        description: Install Toad from GitHub releases
-        allowPrerelease: true
-      settings:
-        GetScript: |
-          @{ Result = Test-Path "$env:LOCALAPPDATA\Programs\toad\toad.exe" }
-        TestScript: |
-          Test-Path "$env:LOCALAPPDATA\Programs\toad\toad.exe"
-        SetScript: |
-          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/batrachianai/toad/releases/latest"
-          $asset = $latestRelease.assets | Where-Object { $_.name -like "*-setup.exe" } | Select-Object -First 1
-          if ($asset) {
-            $installerPath = "$env:TEMP\toad-setup.exe"
-            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $installerPath
-            Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
-            Remove-Item $installerPath -Force
-          }
-
-    - resource: PSDscResources/Script
       id: geminicli
       dependsOn:
         - nvm
