@@ -109,7 +109,7 @@ properties:
         description: Install .NET SDK 10
         allowPrerelease: true
       settings:
-        id: Microsoft.DotNet.SDK.Preview
+        id: Microsoft.DotNet.SDK
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -347,12 +347,11 @@ properties:
             $pwsh7Path = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
             if (Test-Path $pwsh7Path) {
               Write-Host "Installing PowerShell modules for profile..."
-              # Create a temp script to run in PowerShell 7
+              # Use Install-PSResource (modern replacement for Install-Module)
+              # which is built into PowerShell 7.4+
               $scriptLines = @(
-                "Import-Module PowerShellGet -Force -ErrorAction Stop",
-                "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted",
-                "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser",
-                "Install-Module -Name z -Force -Scope CurrentUser -AllowClobber",
+                "Install-PSResource -Name Terminal-Icons -TrustRepository -Scope CurrentUser -Quiet",
+                "Install-PSResource -Name z -TrustRepository -Scope CurrentUser -Quiet",
                 "Write-Output 'Modules installed successfully'"
               )
               $tempScript = "$env:TEMP\install-ps-modules.ps1"
