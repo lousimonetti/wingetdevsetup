@@ -327,6 +327,7 @@ properties:
             $pwsh7Path = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
             if (Test-Path $pwsh7Path) {
               & $pwsh7Path -NoProfile -Command "Install-Module -Name Terminal-Icons -Force -Scope CurrentUser -SkipPublisherCheck"
+              & $pwsh7Path -NoProfile -Command "Install-Module -Name z -Force -Scope CurrentUser -SkipPublisherCheck -AllowClobber"
             }
             
             # Download Oh My Posh theme
