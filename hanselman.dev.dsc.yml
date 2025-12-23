@@ -268,6 +268,22 @@ properties:
         id: SlackTechnologies.Slack
         source: winget
 
+    - resource: PSDscResources/Script
+      id: oktaverify
+      directives:
+        description: Install Okta Verify from download URL
+        allowPrerelease: true
+      settings:
+        GetScript: |
+          @{ Result = Test-Path "$env:LOCALAPPDATA\Okta\Okta Verify\OktaVerify.exe" }
+        TestScript: |
+          Test-Path "$env:LOCALAPPDATA\Okta\Okta Verify\OktaVerify.exe"
+        SetScript: |
+          $installerPath = "$env:TEMP\OktaVerify-Setup.exe"
+          Invoke-WebRequest -Uri "https://gh.io/ov-windows" -OutFile $installerPath
+          Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
+          Remove-Item $installerPath -Force
+
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: windowsapp
       directives:
