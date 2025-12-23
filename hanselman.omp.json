@@ -1,0 +1,106 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "options": {
+            "style": "folder"
+          },
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b0",
+          "template": " \ue5ff {{ .Path }} ",
+          "foreground": "#ffffff",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ff479c",
+          "type": "path",
+          "style": "diamond"
+        },
+        {
+          "options": {
+            "http_timeout": 2000,
+            "url": "https://qk76cb8a-shanselman-guest.t1pal.com/api/v1/entries.json?count=1"
+          },
+          "template": " \udb80\udf91 {{.Sgv}}{{.TrendIcon}} ",
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ff0000",
+          "type": "nightscout",
+          "style": "powerline",
+          "background_templates": [
+            "{{ if gt .Sgv 150 }}#FFFF00{{ end }}",
+            "{{ if lt .Sgv 60 }}#FF0000{{ end }}",
+            "#00FF00"
+          ]
+        },
+        {
+          "options": {
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          },
+          "template": " {{ .HEAD }} {{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0}} \uf692 {{ .StashCount }}{{ end }}{{ if gt .WorktreeCount 0}} \uf1bb {{ .WorktreeCount }}{{ end }} ",
+          "foreground": "#193549",
+          "powerline_symbol": "\ue0b0",
+          "background": "#FFA500",
+          "type": "git",
+          "style": "powerline"
+        },
+        {
+          "options": {
+            "fetch_version": true
+          },
+          "template": " \ue70c {{ if .Unsupported }}\uf071{{ else }}{{ .Full }}{{ end }} ",
+          "foreground": "#ffffff",
+          "powerline_symbol": "\ue0b0",
+          "background": "#6CA35E",
+          "type": "dotnet",
+          "style": "powerline"
+        },
+        {
+          "template": " \uf0e7 ",
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ffff66",
+          "type": "root",
+          "style": "powerline"
+        },
+        {
+          "options": {
+            "style": "austin",
+            "threshold": 1
+          },
+          "template": " <#fefefe>\uf520</> {{ .FormattedMs }} ",
+          "foreground": "#ffffff",
+          "powerline_symbol": "\ue0c4",
+          "background": "#0184bc",
+          "type": "executiontime",
+          "style": "powerline"
+        },
+        {
+          "options": {
+            "always_enabled": true
+          },
+          "trailing_diamond": "\ue0b4",
+          "template": "{{ if matchP \"D:\" .PWD }} \ueb44 {{ else }} {{ end }}",
+          "foreground": "#ffffff",
+          "powerline_symbol": "\ue0b0",
+          "background": "#a1108c",
+          "type": "exit",
+          "style": "powerline",
+          "background_templates": [
+            "{{ if gt .Code 0 }}#f1184c{{ end }}"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "exit",
+      "trailing_diamond": "\ue0b4"
+    }
+  ],
+  "version": 4,
+  "final_space": true
+}
