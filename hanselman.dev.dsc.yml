@@ -286,6 +286,26 @@ properties:
         id: gerardog.gsudo
         source: winget
 
+    - resource: PSDscResources/Script
+      id: handy
+      directives:
+        description: Install Handy from GitHub releases
+        allowPrerelease: true
+      settings:
+        GetScript: |
+          @{ Result = Test-Path "$env:LOCALAPPDATA\Programs\Handy\Handy.exe" }
+        TestScript: |
+          Test-Path "$env:LOCALAPPDATA\Programs\Handy\Handy.exe"
+        SetScript: |
+          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/cjpais/Handy/releases/latest"
+          $asset = $latestRelease.assets | Where-Object { $_.name -like "*_x64-setup.exe" } | Select-Object -First 1
+          if ($asset) {
+            $installerPath = "$env:TEMP\Handy-Setup.exe"
+            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $installerPath
+            Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
+            Remove-Item $installerPath -Force
+          }
+
 # PowerShell Profile and Oh My Posh setup
     - resource: PSDscResources/Script
       id: SetupPowerShellProfile
