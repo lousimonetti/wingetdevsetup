@@ -21,7 +21,7 @@
         {
           "options": {
             "http_timeout": 2000,
-            "url": "https://qk76cb8a-shanselman-guest.t1pal.com/api/v1/entries.json?count=1"
+            "url": "{{ .Env.OSTENSIBLY_NIGHTSCOUT_URL }}"
           },
           "template": " \udb80\udf91 {{.Sgv}}{{.TrendIcon}} ",
           "foreground": "#000000",

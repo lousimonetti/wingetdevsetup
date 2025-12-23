@@ -299,3 +299,9 @@ properties:
               $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{ face = "CaskaydiaCove NF" } -Force
               $settings | ConvertTo-Json -Depth 10 | Set-Content $wtSettingsPath
           }
+          
+          # Fetch Nightscout URL from private gist and set as user env var
+          $nightscoutUrl = gh gist view 985fa5febe6dbf7f2df70d6582d734d9 --raw
+          if ($nightscoutUrl) {
+              [Environment]::SetEnvironmentVariable("OSTENSIBLY_NIGHTSCOUT_URL", $nightscoutUrl.Trim(), "User")
+          }
