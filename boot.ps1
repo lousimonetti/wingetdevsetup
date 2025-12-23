@@ -6,7 +6,7 @@ $mainFunction = {
 
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-    $dscUri = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/main/"
+    $dscUri = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/"
     $dscDev = "hanselman.dev.dsc.yml"
     $dscDevUri = $dscUri + $dscDev
 

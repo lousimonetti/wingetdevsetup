@@ -279,7 +279,7 @@ properties:
           }
           
           # Download profile from repo
-          $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/main"
+          $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
           Invoke-WebRequest -Uri "$repoBase/Microsoft.PowerShell_profile.ps1" -OutFile $PROFILE
           
           # Download Oh My Posh theme
