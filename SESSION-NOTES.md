@@ -15,7 +15,7 @@ Built a complete Windows dev machine setup using WinGet DSC (Desired State Confi
 
 ## Installation Command
 ```powershell
-irm https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/boot.ps1 | iex
+irm https://raw.githubusercontent.com/lousimonetti/wingetdevsetup/master/boot.ps1 | iex
 ```
 
 Then after:
