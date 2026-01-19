@@ -94,7 +94,7 @@ properties:
         TestScript: |
           return $false
         SetScript: |
-          $vsConfigUrl = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/.vsconfig"
+          $vsConfigUrl = "https://raw.githubusercontent.com/lousimonetti/wingetdevsetup/master/.vsconfig"
           $vsConfigPath = "$env:TEMP\.vsconfig"
           Invoke-WebRequest -Uri $vsConfigUrl -OutFile $vsConfigPath
           $vsInstallerPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
@@ -242,15 +242,6 @@ properties:
 
 # Daily Apps
     - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: 1password
-      directives:
-        description: Install 1Password
-        allowPrerelease: true
-      settings:
-        id: AgileBits.1Password
-        source: winget
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: powertoys
       directives:
         description: Install PowerToys
@@ -268,22 +259,6 @@ properties:
         id: SlackTechnologies.Slack
         source: winget
 
-    - resource: PSDscResources/Script
-      id: oktaverify
-      directives:
-        description: Install Okta Verify from download URL
-        allowPrerelease: true
-      settings:
-        GetScript: |
-          @{ Result = Test-Path "$env:LOCALAPPDATA\Okta\Okta Verify\OktaVerify.exe" }
-        TestScript: |
-          Test-Path "$env:LOCALAPPDATA\Okta\Okta Verify\OktaVerify.exe"
-        SetScript: |
-          $installerPath = "$env:TEMP\OktaVerify-Setup.exe"
-          Invoke-WebRequest -Uri "https://gh.io/ov-windows" -OutFile $installerPath
-          Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
-          Remove-Item $installerPath -Force
-
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: windowsapp
       directives:
@@ -300,15 +275,6 @@ properties:
         allowPrerelease: true
       settings:
         id: Voidstar.FilePilot
-        source: winget
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: gsudo
-      directives:
-        description: Install gsudo
-        allowPrerelease: true
-      settings:
-        id: gerardog.gsudo
         source: winget
 
     - resource: PSDscResources/Script
@@ -368,16 +334,7 @@ properties:
         id: Anthropic.ClaudeCode
         source: winget
 
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: goose
-      directives:
-        description: Install Goose
-        allowPrerelease: true
-      settings:
-        id: Pressly.Goose
-        source: winget
-
-    - resource: PSDscResources/Script
+   - resource: PSDscResources/Script
       id: geminicli
       dependsOn:
         - nvm
@@ -404,24 +361,6 @@ properties:
         id: VideoLAN.VLC
         source: winget
 
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: netflix
-      directives:
-        description: Install Netflix
-        allowPrerelease: true
-      settings:
-        id: 9WZDNCRFJ3TJ
-        source: msstore
-
-# Utilities
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: midnightcommander
-      directives:
-        description: Install GNU Midnight Commander
-        allowPrerelease: true
-      settings:
-        id: GNU.MidnightCommander
-        source: winget
 
 # PowerShell Profile and Oh My Posh setup
     - resource: PSDscResources/Script
@@ -441,7 +380,7 @@ properties:
           return $false
         SetScript: |
           try {
-            $repoBase = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master"
+            $repoBase = "https://raw.githubusercontent.com/lousimonetti/wingetdevsetup/master"
             
             # Setup PowerShell 7 profile
             $pwsh7ProfilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
@@ -485,7 +424,7 @@ properties:
             
             # Get Nightscout URL from private gist
             try {
-              $gistContent = (Invoke-WebRequest -Uri "https://gist.githubusercontent.com/shanselman/985fa5febe6dbf7f2df70d6582d734d9/raw" -UseBasicParsing).Content
+              $gistContent = (Invoke-WebRequest -Uri "https://gist.githubusercontent.com/lousimonetti/985fa5febe6dbf7f2df70d6582d734d9/raw" -UseBasicParsing).Content
               if ($gistContent -match '(https://[^\s]+)') {
                 $nightscoutUrl = $matches[1]
                 # Replace placeholder with actual URL
