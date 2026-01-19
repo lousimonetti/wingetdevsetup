@@ -1,7 +1,7 @@
 # WinGet Dev Setup - Session Notes
 **Date:** 2025-12-23  
-**Repository:** https://github.com/shanselman/wingetdevsetup
-
+**Repository:** https://github.com/lousimonetti/wingetdevsetup
+**based on:** https://github.com/shanselman/wingetdevsetup
 ## Overview
 Built a complete Windows dev machine setup using WinGet DSC (Desired State Configuration) for Scott Hanselman's personal machine configuration.
 
