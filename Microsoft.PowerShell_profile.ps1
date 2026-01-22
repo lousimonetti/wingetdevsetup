@@ -24,7 +24,7 @@ try {
 }
 
 #oh-my-posh --init --shell pwsh --config "C:\Users\scottha\OneDrive - Microsoft\poshv5.json" | Invoke-Expression
-oh-my-posh init pwsh --config "$env:USERPROFILE\hanselman.$env:COMPUTERNAME.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config "$env:USERPROFILE\louis.$env:COMPUTERNAME.omp.json" | Invoke-Expression
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
