@@ -6,7 +6,7 @@ $mainFunction = {
 
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-    $dscUri = "https://raw.githubusercontent.com/shanselman/wingetdevsetup/master/"
+    $dscUri = "https://raw.githubusercontent.com/lousimonetti/wingetdevsetup/master/"
     $dscDev = "hanselman.dev.dsc.yml"
     $cacheBust = "?v=$(Get-Date -Format 'yyyyMMddHHmmss')"
     $dscDevUri = $dscUri + $dscDev + $cacheBust
@@ -21,9 +21,9 @@ $mainFunction = {
         exit
     }
     else {
-        Write-Host "Start: Scott Hanselman Dev Machine Setup"
+        Write-Host "Start: Dev Machine Setup"
         winget configuration -f $dscDevUri
-        Write-Host "Done: Scott Hanselman Dev Machine Setup"
+        Write-Host "Done: Dev Machine Setup"
         
         Write-Host ""
         Write-Host "========================================" -ForegroundColor Cyan
